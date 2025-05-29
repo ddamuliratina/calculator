@@ -1,33 +1,53 @@
-import { useState } from 'react';
-import Dropdown from './components/Dropdown';
-import Results from './components/Results';
-import { preCertFees, auditFees } from './components/FeeTables';
+import { useState, useEffect } from "react"; // <-- Added useEffect import
+import Dropdown from "./components/Dropdown";
+import Results from "./components/Results";
+import { preCertFees, auditFees } from "./components/FeeTables";
 
 function App() {
   // State for selections
   const [farmers, setFarmers] = useState(1000);
   const [certType, setCertType] = useState("FT Only");
+  const [calculations, setCalculations] = useState({
+    preCertCost: 0,
+    auditCost: 0,
+    subtotal: 0,
+    vat: 0,
+    totalCost: 0,
+  });
 
-  // Safe fee calculations with error handling
-  const preCertCost = preCertFees[farmers]?.[certType] || 0;
+  useEffect(() => {
+    // <-- Now properly imported
+    const preCertCost = Number(preCertFees[farmers]?.[certType]) || 0;
 
-  const getAuditFees = () => {
-    if (!auditFees[farmers]) return 0;
-    let total = 0;
-    if (certType.includes("FT")) total += auditFees[farmers]?.FT || 0;
-    if (certType.includes("RA")) total += auditFees[farmers]?.RA || 0;
-    if (certType.includes("Organic")) total += auditFees[farmers]?.Organic || 0;
-    return total;
-  };
+    const getAuditFees = () => {
+      if (!auditFees[farmers]) return 0;
+      let total = 0;
+      if (certType.includes("FT")) total += Number(auditFees[farmers]?.FT) || 0;
+      if (certType.includes("RA")) total += Number(auditFees[farmers]?.RA) || 0;
+      if (certType.includes("Organic"))
+        total += Number(auditFees[farmers]?.Organic) || 0;
+      return total;
+    };
 
-  const auditCost = getAuditFees();
-  const totalCost = preCertCost + auditCost;
+    const auditCost = getAuditFees();
+    const subtotal = Number(preCertCost) + Number(auditCost);
+    const vat = subtotal * 0.18;
+    const totalCost = subtotal + vat;
+
+    setCalculations({
+      preCertCost,
+      auditCost,
+      subtotal,
+      vat,
+      totalCost,
+    });
+  }, [farmers, certType]);
 
   // Dropdown options
   const farmerOptions = [
-    { value: 1000, label: '1000' },
-    { value: 2000, label: '2000' },
-    { value: 4000, label: '4000' },
+    { value: 1000, label: "1000" },
+    { value: 2000, label: "2000" },
+    { value: 4000, label: "4000" },
   ];
 
   const certOptions = [
@@ -39,9 +59,9 @@ function App() {
   ];
 
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
+    <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
       <h1>Jber Coffee Cost Estimator</h1>
-      
+
       <Dropdown
         label="Number of Farmers:"
         value={farmers}
@@ -56,10 +76,12 @@ function App() {
         onChange={(e) => setCertType(e.target.value)}
       />
 
-      <Results 
-        preCertCost={preCertCost} 
-        auditCost={auditCost} 
-        totalCost={totalCost} 
+      <Results
+        preCertCost={calculations.preCertCost}
+        auditCost={calculations.auditCost}
+        subtotal={calculations.subtotal}
+        vat={calculations.vat}
+        totalCost={calculations.totalCost}
       />
     </div>
   );
