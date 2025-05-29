@@ -2,8 +2,10 @@ import { useState, useEffect } from "react"; // <-- Added useEffect import
 import Dropdown from "./components/Dropdown";
 import Results from "./components/Results";
 import { preCertFees, auditFees } from "./components/FeeTables";
+import logo from "./assets/logo.png"; // Import the logo
 
 function App() {
+  <div className="calculator-container"></div>;
   // State for selections
   const [farmers, setFarmers] = useState(1000);
   const [certType, setCertType] = useState("FT Only");
@@ -59,8 +61,16 @@ function App() {
   ];
 
   return (
-    <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
-      <h1>Jber Coffee Cost Estimator</h1>
+    <div className="calculator-container">
+      <div className="logo-container">
+        <img
+          src={logo}
+          alt="Plutus Coffee Logo"
+          className="company-logo"
+          style={{ width: "150px", height: "auto" }}
+        />
+      </div>
+      <h1>PLUTUS COFFEE CERTIFICATION COST CALCULATOR</h1>
 
       <Dropdown
         label="Number of Farmers:"

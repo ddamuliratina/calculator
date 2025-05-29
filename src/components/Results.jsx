@@ -1,35 +1,36 @@
-// src/components/Results.jsx
 const formatCurrency = (amount) => {
-  return new Intl.NumberFormat('en-UG', { 
-    style: 'currency', 
-    currency: 'UGX',
+  const value = Number(amount) || 0;
+  return new Intl.NumberFormat("en-UG", {
+    style: "currency",
+    currency: "UGX",
     maximumFractionDigits: 0,
   }).format(amount);
 };
 
-const Results = ({ preCertCost, auditCost, subtotal, vat, totalCost }) => {
-  return (
-    <div style={{ 
-      backgroundColor: '#f5f5f5', 
-      padding: '15px', 
-      borderRadius: '5px',
-      marginTop: '20px'
-    }}>
-      <h3>Cost Breakdown:</h3>
-      <p>Pre-Certification: <strong>{formatCurrency(preCertCost)}</strong></p>
-      <p>Audit Fees: <strong>{formatCurrency(auditCost)}</strong></p>
-      <p>Subtotal: <strong>{formatCurrency(subtotal)}</strong></p>
-      <p>VAT (18%): <strong>{formatCurrency(vat)}</strong></p>
-      <p style={{ 
-        fontSize: '1.2em', 
-        marginTop: '10px',
-        borderTop: '1px solid #ddd',
-        paddingTop: '10px'
-      }}>
-        Total: <strong>{formatCurrency(totalCost)}</strong>
-      </p>
+const Results = ({ preCertCost, auditCost, subtotal, vat, totalCost }) => (
+  <div className="results-panel">
+    <h3 className="results-title">Cost Breakdown</h3>
+    <div className="result-row">
+      <span>Pre-Certification:</span>
+      <span>{formatCurrency(preCertCost)}</span>
     </div>
-  );
-};
+    <div className="result-row">
+      <span>Audit Fees:</span>
+      <span>{formatCurrency(auditCost)}</span>
+    </div>
+    <div className="result-row subtotal-row">
+      <span>Subtotal:</span>
+      <span>{formatCurrency(subtotal)}</span>
+    </div>
+    <div className="result-row vat-row">
+      <span>VAT (18%):</span>
+      <span>{formatCurrency(vat)}</span>
+    </div>
+    <div className="result-row total-row">
+      <span>Total Cost:</span>
+      <span>{formatCurrency(totalCost)}</span>
+    </div>
+  </div>
+);
 
 export default Results;
