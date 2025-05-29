@@ -2,11 +2,10 @@ import { useState, useEffect } from "react"; // <-- Added useEffect import
 import Dropdown from "./components/Dropdown";
 import Results from "./components/Results";
 import { preCertFees, auditFees } from "./components/FeeTables";
-import logo from "./assets/logo.png"; // Import the logo
+import logo from "./assets/logo.jpeg"; // Import the logo
 
 function App() {
-  <div className="calculator-container"></div>;
-  // State for selections
+  // State hooks
   const [farmers, setFarmers] = useState(1000);
   const [certType, setCertType] = useState("FT Only");
   const [calculations, setCalculations] = useState({
@@ -18,7 +17,6 @@ function App() {
   });
 
   useEffect(() => {
-    // <-- Now properly imported
     const preCertCost = Number(preCertFees[farmers]?.[certType]) || 0;
 
     const getAuditFees = () => {
